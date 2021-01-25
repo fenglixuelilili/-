@@ -5,6 +5,7 @@ import store from './store'
 // import utils from './utils/index'
 import 'lib-flexible/flexible.js'
 import './assets/css/reset.css'
+import './router/jurisdiction'
 Vue.config.productionTip = false
 // for(let key in utils){
 //   Vue.prototype.$ppx[key] = utils[key]

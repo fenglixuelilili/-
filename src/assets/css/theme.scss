@@ -1,1 +1,7 @@
-$color: red;
+@import "./mixin.scss";
+//  颜色
+$maincolor: #ff6c8e;
+$bgcolor: #fff;
+
+// 高度
+$bottomheight: r(50);
