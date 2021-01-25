@@ -1,0 +1,31 @@
+$bassSize:75/2;//按照 逻辑像素  375*667 开发
+
+// lib-flexible
+// 逻辑像素开发            375*667       100/(75/2)+rem 
+// 物理像素设计 psd        750*1334      100/75  +rem
+
+@function r($px){
+    @return $px/$bassSize+rem;
+}
+/*
+.box{
+	@include  setRem(padding,20,20,20)
+	r(100)
+}
+
+*/ 
+@mixin setRem($name, $val...) {
+	// ...固定写法,向后若干个值
+    $max: length($val); //4
+	$str: "";
+	// 从1开始到$max(4)
+	@for $i from 1 through $max {
+		$value: nth($val, $i)/$bassSize; //2.17391
+		$str: $str+$value+rem; //4.34783rem
+
+		@if $i<$max {
+			$str:#{$str+" "}; //4.34783rem空格4.34783rem空格
+		}
+	}
+	#{$name}:$str;// padding:10rem 10rem 10rem 10rem;
+}
