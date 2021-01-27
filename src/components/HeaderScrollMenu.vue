@@ -15,23 +15,8 @@ import { scrollmenu } from './componetTypes.ts'
 })
 export default class Home extends Vue {
   @Prop({ type: String, default: '#fff' }) readonly bgm!: String
-  readonly LISTS: scrollmenu[] = [
-    { name: 'follow', text: '关注' },
-    { name: 'recommend', text: '推荐' },
-    { name: 'video', text: '视频' },
-    { name: 'talking', text: '瞎聊' },
-    { name: 'appearance', text: '颜值' },
-    { name: 'delicious', text: '真香' },
-    { name: 'livebroadcast', text: '直播' },
-    { name: 'cart', text: '汽车' },
-    { name: 'projection', text: '放映厅' },
-    { name: 'picture', text: '图片' },
-    { name: 'words', text: '文字' },
-    { name: 'game', text: '游戏' },
-    { name: 'novel', text: '小说' },
-    { name: 'welltodo', text: '小康' }
-  ]
-  active: String = this.LISTS[1].name
+  @Prop({ type: Array, default: [] }) readonly LISTS!: scrollmenu[]
+  @Prop({ type: String }) readonly active!: String
   elementMenu: any
   elementMenuParent: any
   screenWidth: Number = window.screen.width
@@ -41,7 +26,7 @@ export default class Home extends Vue {
   }
   change(item: scrollmenu){
     if(this.active === item.name) return
-    this.active = item.name
+    this.$emit('setActive', item.name)
     this.elementMenu = this.$refs['HeaderScrollMenu' + item.name][0]
     let { left,width } = this.elementMenu.getBoundingClientRect()
     this.scrollTo = (left + width/2 - this.screenWidth / 2) + this.elementMenuParent.scrollLeft
@@ -53,7 +38,7 @@ export default class Home extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-  $_height:r(35);
+  // $_height:r(35);
   .HeaderScrollMenu{
     display: flex;
     overflow-x: scroll;
