@@ -17,10 +17,10 @@ export default class Home extends Vue {
   @Prop({ type: String, default: '#fff' }) readonly bgm!: String
   @Prop({ type: Array, default: [] }) readonly LISTS!: scrollmenu[]
   @Prop({ type: String }) readonly active!: String
-  elementMenu: any
-  elementMenuParent: any
-  screenWidth: Number = window.screen.width
-  scrollTo: Number = 0
+  elementMenu: any = document.createElement('div')
+  elementMenuParent: any = document.createElement('div')
+  screenWidth: number = window.screen.width
+  scrollTo: number = 0
   mounted() {
     this.elementMenuParent = this.$refs['HeaderScrollMenu']
   }

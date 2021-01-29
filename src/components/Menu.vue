@@ -16,6 +16,7 @@ import { Vue, Component , Watch} from 'vue-property-decorator'
 import menus from '@/config/menuconfig.ts'
 import { deepcopy } from '@/utils/index.ts'
 import { menu } from '@/config/types'
+import { Route } from 'vue-router';
 @Component
 export default class Menu extends Vue{
   readonly MENUS = deepcopy(menus)
@@ -32,7 +33,7 @@ export default class Menu extends Vue{
     this.$router.$push(item.path)
   }
   @Watch('$route')
-  changerouter(newrouter){
+  changerouter(newrouter: Route){
     this.active = newrouter.meta.name
   }
 }

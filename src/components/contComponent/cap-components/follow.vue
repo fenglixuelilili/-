@@ -5,13 +5,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Mixins } from 'vue-property-decorator'
+import { myonscroll } from './onscroll.ts'
 @Component({
   components: {
   },
 })
-export default class Home extends Vue {
-  readonly arr: Number = 100 
+export default class Home extends Mixins(myonscroll) {
+  readonly arr: Number = 100
 }
 </script>
 <style lang="scss" scoped>

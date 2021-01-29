@@ -13,6 +13,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import HeaderScrollMenu from '@/components/HeaderScrollMenu'
 import contComponent from '@/components/contComponent'
 import { scrollmenu } from '@/componetTypes.ts'
+interface mobject  {
+  [x: string]: any
+}
 @Component({
   components: {
     HeaderScrollMenu,
@@ -36,18 +39,19 @@ export default class Home extends Vue {
     { name: 'novel', text: '小说' },
     { name: 'welltodo', text: '小康' }
   ]
-  scrollcom: object
+  // 非空断言
+  scrollcom!: mobject
   currentindex = 1
-  active: String = this.LISTS[this.currentindex].name
-  setActive(name: String){
+  active: string = this.LISTS[this.currentindex].name
+  setActive(name: string){
     this.active = name
   }
   updateScrollHeader(){
     let index = this.LISTS.findIndex(item=>this.active === item.name)
-    this.scrollcom.change(this.LISTS[index])
+    this.scrollcom['change'](this.LISTS[index])
   }
   mounted() {
-   this.scrollcom = this.$refs['scrollcom'] 
+   this.scrollcom = {...this.$refs['scrollcom']}
   }
 }
 </script>

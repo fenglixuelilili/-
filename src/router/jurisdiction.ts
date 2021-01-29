@@ -1,5 +1,6 @@
 import router from './index.ts'
-router.beforeEach((to,from,next)=>{
+import { Route } from 'vue-router'
+router.beforeEach((to: Route,from: Route,next: ()=>void): void => {
   if(to.meta && to.meta.name){
     document.title = to.meta.name
   }else{

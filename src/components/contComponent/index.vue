@@ -9,8 +9,10 @@
     <div class="com-l" v-for="(item,index) in LISTS" :key='index'>
       <!-- 预加载上一个 与 下一个 -->
       <component
-        :is="item.name" 
-        :key="index + item.name" 
+        :is="item.name"
+        :key="index + item.name"
+        @disablex='disablexfn'
+        @surex='surex'
         v-if="active === item.name || getIndex === index - 1 || getIndex === index + 1"
         ></component>
     </div>
@@ -34,15 +36,23 @@ import words from './cap-components/words'
 import game from './cap-components/game'
 import novel from './cap-components/novel'
 import welltodo from './cap-components/welltodo'
-let ele = null
-function scrollTo(el,number){
+import { Route } from 'vue-router'
+let ele!: Element
+function scrollTo(el: string, _number: number, animate: boolean=true, scrollX = true){
+  if(!scrollX) return
   if(!ele){
-    ele = document.querySelector('#' + el)
+    if(document.querySelector('#' + el)){
+      ele = document.querySelector('#' + el)
+    }
   }
-  ele.scrollTo({
-    left: number,
-    behavior: "smooth"
-  })
+  if(animate){
+    ele.scrollTo({
+      left: _number,
+      behavior: "smooth"
+    })
+  }else{
+    ele.scrollTo(_number,0)
+  }
 }
 @Component({
   components: {
@@ -64,42 +74,34 @@ function scrollTo(el,number){
 })
 export default class Home extends Vue {
   @Prop({ type: Array, default: [] }) readonly LISTS!: scrollmenu[]
-  @Prop({ type: String }) readonly active!: String
-  get getIndex(){
-    return this.LISTS.findIndex(item=>item.name === this.active)
-  }
-  @Watch('active',{ immediate:true })
-  changeActive(newvalue){
-    console.log(this.getIndex,'this.getIndex',scrollTo)
-    setTimeout(() => {
-      scrollTo('contComponent',this.getIndex * this.Screenwidth)
-    }, 0);
-  }
-  startX: Number
-  endX: Number
-  Screenwidth: Number = window.screen.width
+  @Prop({ type: String }) readonly active!: string
+  flagindex: number = 0
+  // 是否可以横向滚动
+  scrollX: boolean = true
+  startX!:  number
+  endX!:  number
+  Screenwidth:  number = window.screen.width
   touchStart(e){
     this.startX = e.touches[0].clientX
   }
   touchMove(e){
-    // console.log('移动')
-    let end: Number = e.touches[0].clientX
-    let _ch: Number = end - this.startX
-    console.log(_ch)
-    if(end > this.startX){
-      // 往右划
-      // 计算差值
-      scrollTo('contComponent',this.Screenwidth * this.getIndex - _ch)
-    }else{
-      // 往左划
-      scrollTo('contComponent',this.Screenwidth * this.getIndex - _ch)
-    }
+    let end: number = e.touches[0].clientX
+    let _ch: number = end - this.startX
+    // if(end > this.startX){
+    //   // 往右划
+    //   // 计算差值
+    //   scrollTo('contComponent',this.Screenwidth * this.getIndex - _ch, false, this.scrollX)
+    // }else{
+    //   // 往左划
+    //   scrollTo('contComponent',this.Screenwidth * this.getIndex - _ch, false,  this.scrollX)
+    // }
     this.endX = e.touches[0].clientX
   }
   touchEnd(e){
-    let end: Number = this.endX
+    
+    let end:  number = this.endX
     // 在结束位置判断是否需要进行切换
-    let flag = Math.abs(this.startX - end) > 80
+    let flag: boolean = Math.abs(this.startX - end) > 80 && this.scrollX
     if(end > this.startX && flag){
       // 往右划
       if(this.getIndex === 0) return
@@ -112,8 +114,28 @@ export default class Home extends Vue {
       this.$emit('updateScrollHeader')
     }else{
       // 复原
-      scrollTo('contComponent',this.Screenwidth * this.getIndex)
+      scrollTo('contComponent', this.Screenwidth * this.getIndex,true)
     }
+  }
+  disablexfn(){
+    this.scrollX = false
+  }
+  surex(){
+    this.scrollX = true
+  }
+  get getIndex(){
+    return this.LISTS.findIndex(item=>item.name === this.active)
+  }
+  @Watch('active',{ immediate:true })
+  changeActive(newvalue: Route){
+    setTimeout(() => {
+      if(this.flagindex===0){
+        scrollTo('contComponent',this.getIndex * this.Screenwidth, false)
+      }else{
+        scrollTo('contComponent',this.getIndex * this.Screenwidth,true, this.scrollX)
+      }
+      this.flagindex++
+    }, 0);
   }
 }
 </script>

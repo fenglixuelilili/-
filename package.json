@@ -11,6 +11,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "lib-flexible": "^0.3.2",
+    "lodash": "^4.17.20",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2",
